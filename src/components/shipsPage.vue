@@ -2,7 +2,8 @@
   <div id="ships-list">
     <h1>Star wars ships app</h1>
     <SearchPannel
-    v-on:search="search"/>
+    v-on:search="search"
+    v-bind:searchText="this.$route.query.searchText"/>
     <hr>
     <ShipsList
     v-bind:ships="foundShips"/>
@@ -38,6 +39,8 @@ export default {
         .then(response => response.json())
         .then(json => this.ships = json.results)
         .then(() => this.foundShips = this.ships)
+        .then(() => this.search(this.$route.query.searchText))
+        
         
     },
    methods: {
@@ -47,7 +50,8 @@ export default {
       fetch(`https://swapi.dev/api/starships/?page=${this.currentPage}`)
         .then(response => response.json())
         .then(json => this.ships = json.results)
-        .then(() => this.foundShips = this.ships)     
+        .then(() => this.foundShips = this.ships) 
+        .then(() => this.search(this.$route.query.searchText))    
      },
      next(){
       if(this.currentPage + 1 <= 4) this.currentPage++
@@ -55,11 +59,12 @@ export default {
         .then(response => response.json())
         .then(json => this.ships = json.results)
         .then(() => this.foundShips = this.ships)
+        .then(() => this.search(this.$route.query.searchText))
      },
         
         search(text){
-            
-           this.foundShips = this.ships.filter(item => item.name.toUpperCase().includes(text.toUpperCase()))
+        this.$router.push({path: '/', query: {searchText: text}})
+        this.foundShips = this.ships.filter(item => item.name.toUpperCase().includes(this.$route.query.searchText.toUpperCase()))
           
         }
     },
