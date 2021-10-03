@@ -1,11 +1,12 @@
 <template>
     <li>
+    <router-link :to="`ship/${ ship.url.replace(/\D/g,'')}`">
     <span>
         <strong>{{id+1}}</strong>
         {{(ship.name)}}
-        {{ship.url}}
-        
+
     </span>
+    </router-link>
     <button></button>
     </li>
 </template>
