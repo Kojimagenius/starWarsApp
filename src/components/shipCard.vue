@@ -12,6 +12,9 @@
 <p>Starship class: {{this.starshipClass}}</p>
 <p>Crew: {{this.crewNumber}}</p>
 <p>Length of ship: {{this.length}}</p>
+<p>Pilots: {{pilots.join(', ')}}</p>
+<p>Films with this ship: {{films.join(', ')}}</p>
+
 </div>
 </template>
 
@@ -33,6 +36,10 @@ export default {
             starshipClass:'',
             crewNumber: 0,
             length: 0,
+            pilotsUrls: [],
+            pilots: [],
+            filmsUrls: [],
+            films: [],
         }
     },
     mounted(){
@@ -51,9 +58,26 @@ export default {
             this.hyperDriveRating = json.hyperdrive_rating
             this.mglt = json.MGLT
             this.starshipClass = json.starship_class
-           
+            this.pilotsUrls = json.pilots
+            this.filmsUrls = json.films
 
+        }).then(() => {
+            for(let url of this.pilotsUrls){
+                fetch(url).then(response => response.json()).then(item => this.pilots.push(item.name))
+            }
+            this.pilotsUrls = null
+        }).then(() => {
+            for(let url of this.filmsUrls){
+                fetch(url).then(response => response.json()).then(item => this.films.push(item.title))
+            }
+            this.filmsUrls = null
         })
+            /*Promise.all(this.pilotsUrls.map(url => 
+  {console.log(url);fetch(url).then(resp => resp.json())}
+)).then((item) => console.log(item.name));
+        })*/
+        
+
         
         
 
